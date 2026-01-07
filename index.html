@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuantEdge Pro ULTIMATE - Complete Trading Platform</title>
+<title>QuantEdge Pro ULTIMATE - Complete Trading Platform with TradingView</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://s3.tradingview.com/tv.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0a0e27;color:#e2e8f0;overflow-x:hidden}
 .topbar{background:linear-gradient(135deg,#667eea,#764ba2);padding:8px 20px;display:flex;justify-content:space-between;align-items:center;font-size:0.85em}
-.topbar-left{display:flex;gap:15px;align-items:center}
+.topbar-left{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
 .topbar-item{color:#fff;display:flex;align-items:center;gap:5px}
 .topbar-value{font-weight:700}
 .topbar-right{display:flex;gap:10px;align-items:center}
@@ -22,7 +23,7 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0a0e27;colo
 .nav-tab{padding:7px 12px;border-radius:5px;cursor:pointer;transition:all 0.3s;font-size:0.8em;font-weight:600;color:#cbd5e1;background:rgba(102,126,234,0.1)}
 .nav-tab:hover{background:rgba(102,126,234,0.2);color:#fff}
 .nav-tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
-.nav-actions{display:flex;gap:6px}
+.nav-actions{display:flex;gap:6px;flex-wrap:wrap}
 .btn{padding:7px 14px;border:none;border-radius:5px;font-weight:600;cursor:pointer;transition:all 0.3s;font-size:0.8em}
 .btn-primary{background:#fff;color:#667eea}
 .btn-success{background:#10b981;color:#fff}
@@ -39,7 +40,8 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0a0e27;colo
 .card{background:linear-gradient(135deg,#1a1f3a,#2d3561);padding:15px;border-radius:8px;border:1px solid rgba(102,126,234,0.3);margin-bottom:12px}
 .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .card-title{color:#ffd700;font-weight:700;font-size:1em}
-.chart-container{background:#0f1729;border:1px solid rgba(102,126,234,0.3);border-radius:6px;padding:12px;height:300px;margin-bottom:12px}
+.chart-container{background:#0f1729;border:1px solid rgba(102,126,234,0.3);border-radius:6px;padding:12px;height:500px;margin-bottom:12px}
+.tradingview-widget-container{width:100%;height:100%}
 .stat-box{background:rgba(102,126,234,0.1);padding:15px;border-radius:8px;text-align:center;border:1px solid rgba(102,126,234,0.3)}
 .stat-label{font-size:0.75em;color:#94a3b8;margin-bottom:5px;font-weight:600}
 .stat-value{font-size:1.5em;font-weight:bold;color:#e2e8f0}
@@ -60,56 +62,33 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0a0e27;colo
 .input-label{font-size:0.75em;color:#94a3b8;margin-bottom:4px;display:block;font-weight:600}
 .input-field{width:100%;padding:8px;border:2px solid #475569;border-radius:5px;background:#0f1729;color:#e2e8f0;font-size:0.85em}
 .input-field:focus{outline:none;border-color:#667eea}
-.broker-card{background:rgba(102,126,234,0.1);padding:15px;border-radius:8px;border:2px solid rgba(102,126,234,0.3);display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.3s}
-.broker-card:hover{border-color:#667eea;transform:scale(1.02)}
-.broker-card.connected{border-color:#10b981;background:rgba(16,185,129,0.1)}
-.broker-logo{width:50px;height:50px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.5em}
-.broker-info{flex:1}
-.broker-name{font-weight:700;color:#e2e8f0;margin-bottom:3px}
-.broker-status{font-size:0.75em;color:#94a3b8}
-.broker-status.connected{color:#10b981}
-.strategy-list{display:flex;flex-direction:column;gap:10px}
-.strategy-item{background:rgba(102,126,234,0.1);padding:12px;border-radius:6px;border:1px solid rgba(102,126,234,0.3);display:flex;justify-content:space-between;align-items:center}
-.strategy-name{font-weight:600;color:#e2e8f0}
-.strategy-stats{display:flex;gap:15px;font-size:0.8em}
-.strategy-stat{display:flex;flex-direction:column;align-items:center}
-.strategy-stat-label{color:#94a3b8;font-size:0.75em}
-.strategy-stat-value{color:#10b981;font-weight:700}
-.trade-item{background:rgba(102,126,234,0.1);padding:12px;border-radius:6px;border-left:4px solid;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.trade-item.profit{border-color:#10b981}
-.trade-item.loss{border-color:#ef4444}
-.trade-info{flex:1}
-.trade-symbol{font-weight:700;color:#e2e8f0;margin-bottom:3px}
-.trade-time{font-size:0.75em;color:#94a3b8}
-.trade-pnl{font-size:1.2em;font-weight:700}
-.trade-pnl.positive{color:#10b981}
-.trade-pnl.negative{color:#ef4444}
-.notification{background:rgba(102,126,234,0.1);padding:12px;border-radius:6px;border-left:4px solid #667eea;margin-bottom:8px;font-size:0.85em}
-.notification-time{color:#94a3b8;font-size:0.75em;margin-top:5px}
-.pricing-card{background:linear-gradient(135deg,#1a1f3a,#2d3561);padding:25px;border-radius:10px;border:2px solid rgba(102,126,234,0.3);text-align:center;transition:all 0.3s}
-.pricing-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(102,126,234,0.5)}
-.pricing-card.featured{border-color:#ffd700;box-shadow:0 0 30px rgba(255,215,0,0.3)}
-.pricing-tier{font-size:1.5em;font-weight:900;color:#ffd700;margin-bottom:10px}
-.pricing-price{font-size:2.5em;font-weight:900;color:#e2e8f0;margin-bottom:15px}
-.pricing-features{text-align:left;margin:20px 0}
-.pricing-feature{padding:8px 0;border-bottom:1px solid rgba(102,126,234,0.2);font-size:0.85em;color:#cbd5e1}
+.webhook-card{background:rgba(102,126,234,0.1);padding:15px;border-radius:8px;border:2px solid rgba(102,126,234,0.3);margin-bottom:10px}
+.webhook-url{background:#0f1729;padding:10px;border-radius:5px;font-family:monospace;font-size:0.8em;color:#10b981;word-break:break-all;margin:10px 0}
+.indicator-list{display:flex;flex-direction:column;gap:8px}
+.indicator-item{background:rgba(102,126,234,0.1);padding:10px;border-radius:6px;border:1px solid rgba(102,126,234,0.3);display:flex;justify-content:space-between;align-items:center}
+.indicator-name{font-weight:600;color:#e2e8f0;font-size:0.9em}
+.tv-alert-item{background:rgba(102,126,234,0.1);padding:12px;border-radius:6px;border-left:4px solid #667eea;margin-bottom:8px}
+.tv-alert-title{font-weight:700;color:#e2e8f0;margin-bottom:5px}
+.tv-alert-desc{font-size:0.85em;color:#cbd5e1}
+.tv-alert-time{font-size:0.75em;color:#94a3b8;margin-top:5px}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:2000;align-items:center;justify-content:center}
 .modal.active{display:flex}
-.modal-content{background:linear-gradient(135deg,#1a1f3a,#2d3561);padding:25px;border-radius:12px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;border:2px solid rgba(102,126,234,0.5)}
+.modal-content{background:linear-gradient(135deg,#1a1f3a,#2d3561);padding:25px;border-radius:12px;max-width:700px;width:90%;max-height:80vh;overflow-y:auto;border:2px solid rgba(102,126,234,0.5)}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
 .modal-title{font-size:1.3em;color:#ffd700}
 .modal-close{background:none;border:none;color:#e2e8f0;font-size:1.5em;cursor:pointer}
-.progress-bar{width:100%;height:8px;background:#0f1729;border-radius:10px;overflow:hidden;margin:10px 0}
-.progress-fill{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);transition:width 0.3s}
+.code-block{background:#0f1729;padding:12px;border-radius:6px;margin:10px 0;border:1px solid rgba(102,126,234,0.3);overflow-x:auto}
+.code-block pre{color:#10b981;font-family:monospace;font-size:0.8em;white-space:pre-wrap}
 .badge{padding:3px 8px;border-radius:12px;font-size:0.7em;font-weight:700;margin-left:5px}
 .badge-new{background:#10b981;color:#fff}
 .badge-pro{background:#a855f7;color:#fff}
 .badge-premium{background:#ffd700;color:#000}
-.badge-beta{background:#06b6d4;color:#fff}
+.badge-tv{background:#2962ff;color:#fff}
 @media(max-width:1200px){
 .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
 .topbar{flex-direction:column;gap:10px}
 .nav-tabs{flex-wrap:wrap}
+.chart-container{height:400px}
 }
 </style>
 </head>
@@ -134,9 +113,13 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0a0e27;colo
 <span>Portfolio:</span>
 <span class="topbar-value" style="color:#10b981">₹5.8L (+₹12.5K)</span>
 </div>
+<div class="topbar-item">
+<span>📺 TradingView:</span>
+<span class="topbar-value" style="color:#2962ff">Connected</span>
+</div>
 </div>
 <div class="topbar-right">
-<div class="topbar-item">🔔 3 Alerts</div>
+<div class="topbar-item">🔔 5 Alerts</div>
 <div class="user-menu" onclick="showUserMenu()">
 <div class="user-avatar">MS</div>
 <span>Mitul Shah</span>
@@ -150,17 +133,18 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0a0e27;colo
 <div class="nav-brand">🚀 QuantEdge Pro ULTIMATE</div>
 <div class="nav-tabs">
 <div class="nav-tab active" data-tab="dashboard">Dashboard</div>
+<div class="nav-tab" data-tab="tradingview">TradingView <span class="badge badge-tv">TV</span></div>
+<div class="nav-tab" data-tab="charts">Advanced Charts</div>
+<div class="nav-tab" data-tab="alerts">TV Alerts</div>
+<div class="nav-tab" data-tab="webhooks">Webhooks</div>
+<div class="nav-tab" data-tab="indicators">Indicators</div>
 <div class="nav-tab" data-tab="builder">Builder</div>
-<div class="nav-tab" data-tab="live">Live Trading</div>
-<div class="nav-tab" data-tab="portfolio">Portfolio</div>
-<div class="nav-tab" data-tab="analytics">Analytics</div>
-<div class="nav-tab" data-tab="social">Social</div>
-<div class="nav-tab" data-tab="learning">Learning</div>
 <div class="nav-tab" data-tab="settings">Settings</div>
 </div>
 <div class="nav-actions">
+<button class="btn btn-info" onclick="openTradingView()">📺 Open TradingView</button>
 <button class="btn btn-success" onclick="showQuickTrade()">⚡ Quick Trade</button>
-<button class="btn btn-primary" onclick="showAIAssistant()">🤖 AI Assistant</button>
+<button class="btn btn-primary" onclick="showAIAssistant()">🤖 AI</button>
 </div>
 </nav>
 
@@ -169,7 +153,7 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0a0e27;colo
 <!-- Dashboard Tab -->
 <div class="tab-content active" id="dashboard">
 <div class="alert alert-premium">
-<strong>💎 PREMIUM ACTIVE:</strong> All advanced features unlocked! Real-time data, AI assistant, auto-trading, and more.
+<strong>💎 PREMIUM + TradingView ACTIVE:</strong> Full TradingView integration with advanced charting, 100+ indicators, alerts, and webhook automation!
 </div>
 
 <div class="grid-4">
@@ -182,138 +166,445 @@ body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0a0e27;colo
 <div class="stat-value positive">+₹12.5K</div>
 </div>
 <div class="stat-box">
-<div class="stat-label">Active Strategies</div>
-<div class="stat-value">4</div>
+<div class="stat-label">TV Alerts Active</div>
+<div class="stat-value">12</div>
 </div>
 <div class="stat-box">
-<div class="stat-label">Win Rate</div>
-<div class="stat-value">76%</div>
+<div class="stat-label">Auto-Trades Today</div>
+<div class="stat-value">8</div>
 </div>
 </div>
 
-<div class="grid-2">
 <div class="card">
 <div class="card-header">
-<div class="card-title">📈 Real-Time Market Data <span class="badge badge-new">LIVE</span></div>
-<button class="btn btn-info btn-sm" onclick="refreshData()">🔄 Refresh</button>
+<div class="card-title">📺 TradingView Live Chart <span class="badge badge-tv">LIVE</span></div>
+<button class="btn btn-info btn-sm" onclick="openTradingView()">🔗 Open Full</button>
 </div>
 <div class="chart-container">
-<canvas id="marketChart"></canvas>
+<div class="tradingview-widget-container" id="tradingview_widget">
+<div id="tradingview_chart"></div>
 </div>
-</div>
-
-<div class="card">
-<div class="card-header">
-<div class="card-title">🤖 AI Trade Assistant <span class="badge badge-premium">AI</span></div>
-</div>
-<div style="background:rgba(102,126,234,0.1);padding:15px;border-radius:6px;margin-bottom:10px">
-<div style="font-weight:600;margin-bottom:8px">💡 AI Recommendation:</div>
-<div style="font-size:0.9em;color:#cbd5e1;line-height:1.6">
-Based on current market conditions (NIFTY +0.8%, VIX 14.25), consider an Iron Condor strategy with strikes at 23400/23300 PUT and 23600/23700 CALL. Expected profit: ₹8,500. Win probability: 72%.
-</div>
-</div>
-<button class="btn btn-success" style="width:100%" onclick="applyAIStrategy()">✅ Apply Strategy</button>
-<button class="btn btn-info" style="width:100%;margin-top:8px" onclick="showAIAssistant()">💬 Chat with AI</button>
 </div>
 </div>
 
 <div class="grid-2">
 <div class="card">
 <div class="card-header">
-<div class="card-title">🔔 Smart Alerts <span class="badge badge-new">NEW</span></div>
-<button class="btn btn-info btn-sm" onclick="manageAlerts()">⚙️ Manage</button>
+<div class="card-title">🔔 Recent TradingView Alerts</div>
 </div>
-<div class="notification">
-<strong>🎯 Price Alert:</strong> NIFTY crossed 23,500
-<div class="notification-time">2 minutes ago</div>
+<div class="tv-alert-item">
+<div class="tv-alert-title">🎯 RSI Oversold - NIFTY</div>
+<div class="tv-alert-desc">RSI(14) crossed below 30. Potential buy signal.</div>
+<div class="tv-alert-time">2 minutes ago • Auto-executed: BUY 1 lot</div>
 </div>
-<div class="notification">
-<strong>📊 Greek Alert:</strong> Portfolio Delta reached +0.5
-<div class="notification-time">15 minutes ago</div>
+<div class="tv-alert-item">
+<div class="tv-alert-title">📈 MACD Bullish Crossover - BANKNIFTY</div>
+<div class="tv-alert-desc">MACD crossed above signal line. Bullish momentum.</div>
+<div class="tv-alert-time">15 minutes ago • Notification sent</div>
 </div>
-<div class="notification">
-<strong>⚡ Volatility Alert:</strong> VIX dropped below 15
-<div class="notification-time">1 hour ago</div>
-</div>
-</div>
-
-<div class="card">
-<div class="card-header">
-<div class="card-title">📊 Active Strategies</div>
-<button class="btn btn-success btn-sm" onclick="newStrategy()">➕ New</button>
-</div>
-<div class="strategy-list">
-<div class="strategy-item">
-<div class="strategy-name">Iron Condor Pro</div>
-<div class="strategy-stats">
-<div class="strategy-stat">
-<div class="strategy-stat-label">P&L</div>
-<div class="strategy-stat-value">+₹4.2K</div>
-</div>
-<div class="strategy-stat">
-<div class="strategy-stat-label">Status</div>
-<div class="strategy-stat-value">Active</div>
-</div>
-</div>
-</div>
-<div class="strategy-item">
-<div class="strategy-name">Straddle Master</div>
-<div class="strategy-stats">
-<div class="strategy-stat">
-<div class="strategy-stat-label">P&L</div>
-<div class="strategy-stat-value">+₹3.8K</div>
-</div>
-<div class="strategy-stat">
-<div class="strategy-stat-label">Status</div>
-<div class="strategy-stat-value">Active</div>
-</div>
-</div>
-</div>
-</div>
+<div class="tv-alert-item">
+<div class="tv-alert-title">⚡ Price Alert - NIFTY 23500</div>
+<div class="tv-alert-desc">NIFTY crossed above 23,500 resistance level.</div>
+<div class="tv-alert-time">1 hour ago • Strategy triggered</div>
 </div>
 </div>
 
 <div class="card">
 <div class="card-header">
-<div class="card-title">📝 Recent Trades <span class="badge badge-new">LIVE</span></div>
+<div class="card-title">🤖 AI + TradingView Combo</div>
 </div>
-<div class="trade-item profit">
-<div class="trade-info">
-<div class="trade-symbol">NIFTY 23500 CE - BUY</div>
-<div class="trade-time">Today, 10:45 AM</div>
+<div style="background:rgba(102,126,234,0.1);padding:15px;border-radius:6px;margin-bottom:10px">
+<div style="font-weight:600;margin-bottom:8px">💡 AI Analysis + TV Signals:</div>
+<div style="font-size:0.9em;color:#cbd5e1;line-height:1.6">
+TradingView RSI shows oversold (28.5) + AI predicts 72% probability of bounce. Recommended: BUY NIFTY 23500 CE. Expected profit: ₹4,200.
 </div>
-<div class="trade-pnl positive">+₹2,450</div>
 </div>
-<div class="trade-item profit">
-<div class="trade-info">
-<div class="trade-symbol">BANKNIFTY 48000 PE - SELL</div>
-<div class="trade-time">Today, 11:20 AM</div>
+<button class="btn btn-success" style="width:100%" onclick="executeComboTrade()">✅ Execute AI + TV Trade</button>
 </div>
-<div class="trade-pnl positive">+₹1,850</div>
 </div>
-<div class="trade-item loss">
-<div class="trade-info">
-<div class="trade-symbol">NIFTY 23400 PE - BUY</div>
-<div class="trade-time">Today, 2:15 PM</div>
 </div>
-<div class="trade-pnl negative">-₹680</div>
+
+<!-- TradingView Tab -->
+<div class="tab-content" id="tradingview">
+<div class="alert alert-info">
+<strong>📺 TradingView Integration:</strong> Full-featured TradingView charts with 100+ indicators, drawing tools, and real-time data.
 </div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">📺 TradingView Advanced Chart</div>
+<div>
+<button class="btn btn-info btn-sm" onclick="changeSymbol('NSE:NIFTY')">NIFTY</button>
+<button class="btn btn-info btn-sm" onclick="changeSymbol('NSE:BANKNIFTY')">BANKNIFTY</button>
+<button class="btn btn-info btn-sm" onclick="changeSymbol('NSE:FINNIFTY')">FINNIFTY</button>
+</div>
+</div>
+<div class="chart-container" style="height:600px">
+<div class="tradingview-widget-container" style="height:100%">
+<div id="tradingview_main_chart" style="height:100%"></div>
+</div>
+</div>
+</div>
+
+<div class="grid-3">
+<div class="feature-card" onclick="showTVFeature('screener')">
+<div class="feature-icon">🔍</div>
+<div class="feature-title">Stock Screener</div>
+<div class="feature-desc">Scan markets with custom filters</div>
+</div>
+<div class="feature-card" onclick="showTVFeature('heatmap')">
+<div class="feature-icon">🔥</div>
+<div class="feature-title">Market Heatmap</div>
+<div class="feature-desc">Visual market overview</div>
+</div>
+<div class="feature-card" onclick="showTVFeature('economic')">
+<div class="feature-icon">📊</div>
+<div class="feature-title">Economic Calendar</div>
+<div class="feature-desc">Track important events</div>
+</div>
+</div>
+</div>
+
+<!-- Advanced Charts Tab -->
+<div class="tab-content" id="charts">
+<div class="alert alert-premium">
+<strong>📈 Advanced Charting:</strong> Multiple chart types, timeframes, and 100+ technical indicators from TradingView.
+</div>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-header">
+<div class="card-title">📊 Multi-Chart Layout</div>
+</div>
+<div class="chart-container" style="height:400px">
+<div class="tradingview-widget-container" style="height:100%">
+<div id="tradingview_chart1" style="height:100%"></div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">📈 Comparison Chart</div>
+</div>
+<div class="chart-container" style="height:400px">
+<div class="tradingview-widget-container" style="height:100%">
+<div id="tradingview_chart2" style="height:100%"></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">🎨 Chart Types Available</div>
+<div class="grid-4">
+<div class="feature-card" onclick="setChartType('candlestick')">
+<div class="feature-icon">📊</div>
+<div class="feature-title">Candlestick</div>
+</div>
+<div class="feature-card" onclick="setChartType('line')">
+<div class="feature-icon">📈</div>
+<div class="feature-title">Line Chart</div>
+</div>
+<div class="feature-card" onclick="setChartType('area')">
+<div class="feature-icon">📉</div>
+<div class="feature-title">Area Chart</div>
+</div>
+<div class="feature-card" onclick="setChartType('heikinashi')">
+<div class="feature-icon">🎯</div>
+<div class="feature-title">Heikin Ashi</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- TV Alerts Tab -->
+<div class="tab-content" id="alerts">
+<div class="alert alert-success">
+<strong>🔔 TradingView Alerts:</strong> 12 active alerts monitoring price, indicators, and patterns. Auto-execution enabled.
+</div>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-header">
+<div class="card-title">🔔 Active TV Alerts</div>
+<button class="btn btn-success btn-sm" onclick="createTVAlert()">➕ New Alert</button>
+</div>
+<div class="indicator-list">
+<div class="indicator-item">
+<div>
+<div class="indicator-name">🎯 NIFTY > 23,600</div>
+<div style="font-size:0.75em;color:#94a3b8">Price alert • Auto-execute: BUY</div>
+</div>
+<button class="btn btn-danger btn-sm">Delete</button>
+</div>
+<div class="indicator-item">
+<div>
+<div class="indicator-name">📊 RSI(14) < 30</div>
+<div style="font-size:0.75em;color:#94a3b8">Indicator alert • Notify only</div>
+</div>
+<button class="btn btn-danger btn-sm">Delete</button>
+</div>
+<div class="indicator-item">
+<div>
+<div class="indicator-name">⚡ MACD Bullish Cross</div>
+<div style="font-size:0.75em;color:#94a3b8">Signal alert • Auto-execute</div>
+</div>
+<button class="btn btn-danger btn-sm">Delete</button>
+</div>
+<div class="indicator-item">
+<div>
+<div class="indicator-name">🎯 Bollinger Band Touch</div>
+<div style="font-size:0.75em;color:#94a3b8">Pattern alert • Notify + Execute</div>
+</div>
+<button class="btn btn-danger btn-sm">Delete</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">⚙️ Alert Settings</div>
+</div>
+<div class="input-group">
+<label class="input-label">Alert Type</label>
+<select class="input-field">
+<option>Price Alert</option>
+<option>Indicator Alert</option>
+<option>Pattern Alert</option>
+<option>Volume Alert</option>
+<option>Custom Condition</option>
+</select>
+</div>
+<div class="input-group">
+<label class="input-label">Action on Trigger</label>
+<select class="input-field">
+<option>Notify Only</option>
+<option>Auto-Execute Trade</option>
+<option>Notify + Execute</option>
+<option>Send to Webhook</option>
+</select>
+</div>
+<div class="input-group">
+<label class="input-label">Notification Channels</label>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:5px">
+<label style="display:flex;align-items:center;gap:5px">
+<input type="checkbox" checked> Email
+</label>
+<label style="display:flex;align-items:center;gap:5px">
+<input type="checkbox" checked> SMS
+</label>
+<label style="display:flex;align-items:center;gap:5px">
+<input type="checkbox" checked> Push
+</label>
+<label style="display:flex;align-items:center;gap:5px">
+<input type="checkbox" checked> Telegram
+</label>
+</div>
+</div>
+<button class="btn btn-success" style="width:100%;margin-top:10px">💾 Save Alert</button>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">📊 Alert Statistics</div>
+<div class="grid-4">
+<div class="stat-box">
+<div class="stat-label">Total Alerts</div>
+<div class="stat-value">12</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Triggered Today</div>
+<div class="stat-value">8</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Auto-Executed</div>
+<div class="stat-value">5</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Success Rate</div>
+<div class="stat-value positive">78%</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Webhooks Tab -->
+<div class="tab-content" id="webhooks">
+<div class="alert alert-info">
+<strong>🔗 Webhook Integration:</strong> Connect TradingView alerts to auto-execute trades via webhooks. Supports JSON payloads.
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">🔗 Your Webhook URLs</div>
+<button class="btn btn-success btn-sm" onclick="generateWebhook()">➕ Generate New</button>
+</div>
+
+<div class="webhook-card">
+<div style="font-weight:600;margin-bottom:8px">📍 Primary Webhook (Auto-Trading)</div>
+<div class="webhook-url">https://api.quantedge.pro/webhook/tv/execute/abc123xyz</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn btn-info btn-sm" onclick="copyWebhook(1)">📋 Copy</button>
+<button class="btn btn-warning btn-sm" onclick="testWebhook(1)">🧪 Test</button>
+<button class="btn btn-danger btn-sm">🗑️ Delete</button>
+</div>
+</div>
+
+<div class="webhook-card">
+<div style="font-weight:600;margin-bottom:8px">📍 Secondary Webhook (Notifications)</div>
+<div class="webhook-url">https://api.quantedge.pro/webhook/tv/notify/def456uvw</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn btn-info btn-sm" onclick="copyWebhook(2)">📋 Copy</button>
+<button class="btn btn-warning btn-sm" onclick="testWebhook(2)">🧪 Test</button>
+<button class="btn btn-danger btn-sm">🗑️ Delete</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">📝 Webhook Payload Format</div>
+<div class="code-block">
+<pre>{
+  "action": "buy",
+  "symbol": "NIFTY23500CE",
+  "quantity": 1,
+  "price": "market",
+  "strategy": "RSI_Oversold",
+  "timestamp": "{{timenow}}",
+  "alert_name": "{{alert_name}}",
+  "ticker": "{{ticker}}",
+  "close": "{{close}}",
+  "volume": "{{volume}}"
+}</pre>
+</div>
+<button class="btn btn-info" onclick="copyPayload()">📋 Copy Payload Template</button>
+</div>
+
+<div class="card">
+<div class="card-title">🎯 How to Setup TradingView Webhook</div>
+<div style="color:#cbd5e1;line-height:1.8;font-size:0.9em">
+<ol style="padding-left:20px">
+<li style="margin:10px 0"><strong>Step 1:</strong> Copy your webhook URL from above</li>
+<li style="margin:10px 0"><strong>Step 2:</strong> Open TradingView and create an alert</li>
+<li style="margin:10px 0"><strong>Step 3:</strong> In alert settings, enable "Webhook URL"</li>
+<li style="margin:10px 0"><strong>Step 4:</strong> Paste your webhook URL</li>
+<li style="margin:10px 0"><strong>Step 5:</strong> Add JSON payload in "Message" field</li>
+<li style="margin:10px 0"><strong>Step 6:</strong> Save alert - trades will auto-execute!</li>
+</ol>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">📊 Webhook Activity</div>
+<div class="grid-4">
+<div class="stat-box">
+<div class="stat-label">Total Webhooks</div>
+<div class="stat-value">2</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Calls Today</div>
+<div class="stat-value">24</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Success Rate</div>
+<div class="stat-value positive">96%</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Avg Response</div>
+<div class="stat-value">145ms</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Indicators Tab -->
+<div class="tab-content" id="indicators">
+<div class="alert alert-premium">
+<strong>📊 100+ TradingView Indicators:</strong> Access all built-in indicators plus custom Pine Script indicators.
+</div>
+
+<div class="card">
+<div class="card-title">🎯 Popular Indicators</div>
+<div class="grid-3">
+<div class="feature-card" onclick="addIndicator('RSI')">
+<div class="feature-icon">📊</div>
+<div class="feature-title">RSI (14)</div>
+<div class="feature-desc">Relative Strength Index</div>
+</div>
+<div class="feature-card" onclick="addIndicator('MACD')">
+<div class="feature-icon">📈</div>
+<div class="feature-title">MACD</div>
+<div class="feature-desc">Moving Average Convergence</div>
+</div>
+<div class="feature-card" onclick="addIndicator('BB')">
+<div class="feature-icon">📉</div>
+<div class="feature-title">Bollinger Bands</div>
+<div class="feature-desc">Volatility indicator</div>
+</div>
+<div class="feature-card" onclick="addIndicator('EMA')">
+<div class="feature-icon">📊</div>
+<div class="feature-title">EMA (20, 50)</div>
+<div class="feature-desc">Exponential Moving Average</div>
+</div>
+<div class="feature-card" onclick="addIndicator('VWAP')">
+<div class="feature-icon">💰</div>
+<div class="feature-title">VWAP</div>
+<div class="feature-desc">Volume Weighted Avg Price</div>
+</div>
+<div class="feature-card" onclick="addIndicator('STOCH')">
+<div class="feature-icon">⚡</div>
+<div class="feature-title">Stochastic</div>
+<div class="feature-desc">Momentum oscillator</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">💎 Premium Indicators <span class="badge badge-premium">PRO</span></div>
+<div class="grid-3">
+<div class="feature-card">
+<div class="feature-icon">🎯</div>
+<div class="feature-title">Order Flow</div>
+<div class="feature-desc">Institutional order tracking</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">📊</div>
+<div class="feature-title">Market Profile</div>
+<div class="feature-desc">Volume profile analysis</div>
+</div>
+<div class="feature-card">
+<div class="feature-icon">⚡</div>
+<div class="feature-title">Smart Money</div>
+<div class="feature-desc">Smart money concepts</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">📝 Custom Pine Script</div>
+<div class="input-group">
+<label class="input-label">Paste Your Pine Script Code</label>
+<textarea class="input-field" rows="8" placeholder="//@version=5
+indicator('My Custom Indicator', overlay=true)
+// Your Pine Script code here..."></textarea>
+</div>
+<button class="btn btn-success" style="width:100%;margin-top:10px">✅ Add Custom Indicator</button>
 </div>
 </div>
 
 <!-- Builder Tab -->
 <div class="tab-content" id="builder">
 <div class="alert alert-info">
-<strong>🎯 Strategy Builder:</strong> Create complex multi-leg strategies with AI optimization, Greeks analysis, and probability calculations.
+<strong>🏗️ Strategy Builder:</strong> Build strategies and sync with TradingView for automated execution.
 </div>
 <div class="card">
-<div class="card-title">🏗️ Visual Strategy Builder</div>
-<p style="color:#cbd5e1;margin:15px 0">Build your strategy using the advanced builder with all features:</p>
+<div class="card-title">🎯 Strategy Builder Options</div>
 <div class="grid-3">
 <div class="feature-card" onclick="openBuilder('basic')">
 <div class="feature-icon">🎯</div>
 <div class="feature-title">Basic Builder</div>
-<div class="feature-desc">Simple leg-by-leg builder</div>
+<div class="feature-desc">Simple strategy creation</div>
 </div>
 <div class="feature-card" onclick="openBuilder('advanced')">
 <div class="feature-icon">🚀</div>
@@ -322,293 +613,84 @@ Based on current market conditions (NIFTY +0.8%, VIX 14.25), consider an Iron Co
 </div>
 <div class="feature-card" onclick="openBuilder('ultimate')">
 <div class="feature-icon">💎</div>
-<div class="feature-title">Ultimate Builder <span class="badge badge-premium">PRO</span></div>
-<div class="feature-desc">All features + AI</div>
+<div class="feature-title">Ultimate Builder</div>
+<div class="feature-desc">AI + TradingView sync</div>
 </div>
-</div>
-</div>
-</div>
-
-<!-- Live Trading Tab -->
-<div class="tab-content" id="live">
-<div class="alert alert-success">
-<strong>🔴 LIVE TRADING ACTIVE:</strong> Connected to Zerodha. Auto-trading enabled for 4 strategies.
-</div>
-
-<div class="grid-2">
-<div class="card">
-<div class="card-header">
-<div class="card-title">🤝 Broker Connections <span class="badge badge-new">SYNC</span></div>
-</div>
-<div style="display:flex;flex-direction:column;gap:10px">
-<div class="broker-card connected">
-<div class="broker-logo">Z</div>
-<div class="broker-info">
-<div class="broker-name">Zerodha Kite</div>
-<div class="broker-status connected">✅ Connected | Balance: ₹2.5L</div>
-</div>
-<button class="btn btn-danger btn-sm">Disconnect</button>
-</div>
-<div class="broker-card">
-<div class="broker-logo">U</div>
-<div class="broker-info">
-<div class="broker-name">Upstox</div>
-<div class="broker-status">Not Connected</div>
-</div>
-<button class="btn btn-success btn-sm">Connect</button>
-</div>
-<div class="broker-card">
-<div class="broker-logo">A</div>
-<div class="broker-info">
-<div class="broker-name">Angel One</div>
-<div class="broker-status">Not Connected</div>
-</div>
-<button class="btn btn-success btn-sm">Connect</button>
-</div>
-</div>
-</div>
-
-<div class="card">
-<div class="card-header">
-<div class="card-title">📊 Live Positions</div>
-</div>
-<table style="width:100%;font-size:0.85em">
-<thead>
-<tr style="border-bottom:2px solid rgba(102,126,234,0.3)">
-<th style="padding:10px;text-align:left">Symbol</th>
-<th style="padding:10px;text-align:right">Qty</th>
-<th style="padding:10px;text-align:right">Entry</th>
-<th style="padding:10px;text-align:right">LTP</th>
-<th style="padding:10px;text-align:right">P&L</th>
-</tr>
-</thead>
-<tbody>
-<tr style="border-bottom:1px solid rgba(102,126,234,0.2)">
-<td style="padding:10px">NIFTY 23500 CE</td>
-<td style="padding:10px;text-align:right">2</td>
-<td style="padding:10px;text-align:right">₹145</td>
-<td style="padding:10px;text-align:right">₹168</td>
-<td style="padding:10px;text-align:right;color:#10b981;font-weight:700">+₹2,300</td>
-</tr>
-<tr style="border-bottom:1px solid rgba(102,126,234,0.2)">
-<td style="padding:10px">NIFTY 23400 PE</td>
-<td style="padding:10px;text-align:right">1</td>
-<td style="padding:10px;text-align:right">₹125</td>
-<td style="padding:10px;text-align:right">₹138</td>
-<td style="padding:10px;text-align:right;color:#10b981;font-weight:700">+₹650</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-<!-- Portfolio Tab -->
-<div class="tab-content" id="portfolio">
-<div class="alert alert-info">
-<strong>💼 Portfolio Tracker:</strong> Multi-strategy portfolio management with consolidated P&L and risk metrics.
-</div>
-
-<div class="grid-4">
-<div class="stat-box">
-<div class="stat-label">Total Value</div>
-<div class="stat-value">₹5.8L</div>
-</div>
-<div class="stat-box">
-<div class="stat-label">All-Time P&L</div>
-<div class="stat-value positive">+₹45.2K</div>
-</div>
-<div class="stat-box">
-<div class="stat-label">Sharpe Ratio</div>
-<div class="stat-value">2.68</div>
-</div>
-<div class="stat-box">
-<div class="stat-label">Max Drawdown</div>
-<div class="stat-value negative">-12%</div>
-</div>
-</div>
-
-<div class="card">
-<div class="card-header">
-<div class="card-title">📈 Equity Curve</div>
-</div>
-<div class="chart-container">
-<canvas id="equityChart"></canvas>
-</div>
-</div>
-</div>
-
-<!-- Analytics Tab -->
-<div class="tab-content" id="analytics">
-<div class="alert alert-premium">
-<strong>📊 Advanced Analytics:</strong> Heatmaps, correlation matrix, sentiment analysis, and risk metrics.
-</div>
-
-<div class="grid-3">
-<div class="feature-card" onclick="showAnalytics('heatmap')">
-<div class="feature-icon">🔥</div>
-<div class="feature-title">Heatmaps</div>
-<div class="feature-desc">Performance & correlation heatmaps</div>
-</div>
-<div class="feature-card" onclick="showAnalytics('sentiment')">
-<div class="feature-icon">📈</div>
-<div class="feature-title">Sentiment Analysis</div>
-<div class="feature-desc">News, social media, options flow</div>
-</div>
-<div class="feature-card" onclick="showAnalytics('risk')">
-<div class="feature-icon">⚠️</div>
-<div class="feature-title">Risk Analytics</div>
-<div class="feature-desc">VaR, CVaR, Monte Carlo</div>
-</div>
-</div>
-</div>
-
-<!-- Social Tab -->
-<div class="tab-content" id="social">
-<div class="alert alert-info">
-<strong>🌐 Social Trading:</strong> Follow top traders, copy strategies, and compete on leaderboards.
-</div>
-
-<div class="grid-2">
-<div class="card">
-<div class="card-header">
-<div class="card-title">🏆 Top Traders</div>
-</div>
-<div style="display:flex;flex-direction:column;gap:10px">
-<div class="strategy-item">
-<div class="strategy-name">🥇 Rajesh Kumar</div>
-<div class="strategy-stats">
-<div class="strategy-stat">
-<div class="strategy-stat-label">Return</div>
-<div class="strategy-stat-value">+245%</div>
-</div>
-<div class="strategy-stat">
-<div class="strategy-stat-label">Followers</div>
-<div class="strategy-stat-value">1,250</div>
-</div>
-</div>
-<button class="btn btn-success btn-sm">Follow</button>
-</div>
-<div class="strategy-item">
-<div class="strategy-name">🥈 Priya Sharma</div>
-<div class="strategy-stats">
-<div class="strategy-stat">
-<div class="strategy-stat-label">Return</div>
-<div class="strategy-stat-value">+198%</div>
-</div>
-<div class="strategy-stat">
-<div class="strategy-stat-label">Followers</div>
-<div class="strategy-stat-value">890</div>
-</div>
-</div>
-<button class="btn btn-success btn-sm">Follow</button>
-</div>
-</div>
-</div>
-
-<div class="card">
-<div class="card-header">
-<div class="card-title">📝 Trade Journal <span class="badge badge-new">NEW</span></div>
-</div>
-<p style="color:#cbd5e1;margin-bottom:15px">Log your trades with notes, screenshots, and emotions for better analysis.</p>
-<button class="btn btn-primary" style="width:100%" onclick="openJournal()">📖 Open Journal</button>
-</div>
-</div>
-</div>
-
-<!-- Learning Tab -->
-<div class="tab-content" id="learning">
-<div class="alert alert-info">
-<strong>🎓 Learning Center:</strong> Video tutorials, courses, webinars, and certifications.
-</div>
-
-<div class="grid-3">
-<div class="feature-card">
-<div class="feature-icon">🎥</div>
-<div class="feature-title">Video Tutorials</div>
-<div class="feature-desc">50+ step-by-step videos</div>
-<button class="btn btn-primary btn-sm" style="margin-top:10px;width:100%">Watch Now</button>
-</div>
-<div class="feature-card">
-<div class="feature-icon">📚</div>
-<div class="feature-title">Online Courses</div>
-<div class="feature-desc">Complete trading courses</div>
-<button class="btn btn-primary btn-sm" style="margin-top:10px;width:100%">Enroll</button>
-</div>
-<div class="feature-card">
-<div class="feature-icon">🎓</div>
-<div class="feature-title">Certifications</div>
-<div class="feature-desc">Get certified trader badge</div>
-<button class="btn btn-primary btn-sm" style="margin-top:10px;width:100%">Start</button>
 </div>
 </div>
 </div>
 
 <!-- Settings Tab -->
 <div class="tab-content" id="settings">
-<div class="alert alert-info">
-<strong>⚙️ Settings:</strong> Customize your platform, manage subscriptions, and configure integrations.
+<div class="alert alert-premium">
+<strong>⚙️ TradingView Settings:</strong> Configure TradingView integration, API keys, and preferences.
 </div>
 
 <div class="grid-2">
 <div class="card">
-<div class="card-title">💳 Subscription Plan</div>
+<div class="card-title">📺 TradingView Connection</div>
+<div style="background:rgba(16,185,129,0.1);padding:15px;border-radius:6px;border:2px solid #10b981;margin:15px 0">
+<div style="font-size:1.1em;font-weight:700;color:#10b981;margin-bottom:5px">✅ CONNECTED</div>
+<div style="color:#cbd5e1;font-size:0.9em">TradingView Pro account linked</div>
+</div>
+<div class="input-group">
+<label class="input-label">TradingView Username</label>
+<input type="text" class="input-field" value="mitul_shah_trader" readonly>
+</div>
+<div class="input-group">
+<label class="input-label">API Key</label>
+<input type="password" class="input-field" value="••••••••••••••••" readonly>
+</div>
+<button class="btn btn-warning" style="width:100%">🔄 Reconnect</button>
+<button class="btn btn-danger" style="width:100%;margin-top:8px">❌ Disconnect</button>
+</div>
+
+<div class="card">
+<div class="card-title">🔔 TradingView Alert Preferences</div>
+<div class="input-group">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+<input type="checkbox" checked>
+<span>Auto-execute trades from TV alerts</span>
+</label>
+</div>
+<div class="input-group">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+<input type="checkbox" checked>
+<span>Require confirmation for large orders</span>
+</label>
+</div>
+<div class="input-group">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+<input type="checkbox" checked>
+<span>Send notifications for all alerts</span>
+</label>
+</div>
+<div class="input-group">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+<input type="checkbox">
+<span>Pause auto-trading during high volatility</span>
+</label>
+</div>
+<button class="btn btn-success" style="width:100%;margin-top:10px">💾 Save Preferences</button>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">💳 TradingView Subscription</div>
 <div style="background:rgba(255,215,0,0.1);padding:15px;border-radius:6px;border:2px solid #ffd700;margin:15px 0">
-<div style="font-size:1.2em;font-weight:700;color:#ffd700;margin-bottom:5px">PREMIUM PLAN</div>
-<div style="color:#cbd5e1;font-size:0.9em">₹2,999/month • Renews on Jan 15, 2024</div>
+<div style="font-size:1.2em;font-weight:700;color:#ffd700;margin-bottom:5px">TRADINGVIEW PRO+</div>
+<div style="color:#cbd5e1;font-size:0.9em">Included with QuantEdge Premium • All features unlocked</div>
 </div>
-<button class="btn btn-warning" style="width:100%">Upgrade to Enterprise</button>
-<button class="btn btn-danger" style="width:100%;margin-top:8px">Cancel Subscription</button>
-</div>
-
-<div class="card">
-<div class="card-title">🔔 Notification Settings</div>
-<div class="input-group">
-<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-<input type="checkbox" checked>
-<span>Email Notifications</span>
-</label>
-</div>
-<div class="input-group">
-<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-<input type="checkbox" checked>
-<span>SMS Alerts</span>
-</label>
-</div>
-<div class="input-group">
-<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-<input type="checkbox" checked>
-<span>Push Notifications</span>
-</label>
-</div>
-<div class="input-group">
-<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-<input type="checkbox" checked>
-<span>Telegram Alerts</span>
-</label>
-</div>
-<button class="btn btn-success" style="width:100%;margin-top:10px">Save Settings</button>
-</div>
-</div>
-
-<div class="card">
-<div class="card-title">🎨 Theme & Appearance</div>
-<div class="grid-3">
-<div class="feature-card" onclick="setTheme('dark')">
-<div class="feature-icon">🌙</div>
-<div class="feature-title">Dark Theme</div>
-<div class="feature-desc">Current</div>
-</div>
-<div class="feature-card" onclick="setTheme('light')">
-<div class="feature-icon">☀️</div>
-<div class="feature-title">Light Theme</div>
-<div class="feature-desc">Switch</div>
-</div>
-<div class="feature-card" onclick="setTheme('custom')">
-<div class="feature-icon">🎨</div>
-<div class="feature-title">Custom</div>
-<div class="feature-desc">Customize</div>
-</div>
+<div style="color:#cbd5e1;font-size:0.9em;line-height:1.6">
+<strong>Included Features:</strong>
+<ul style="margin:10px 0;padding-left:20px">
+<li>Unlimited indicators per chart</li>
+<li>Advanced chart types</li>
+<li>Custom timeframes</li>
+<li>Volume profile</li>
+<li>Multiple chart layouts</li>
+<li>Priority data feeds</li>
+</ul>
 </div>
 </div>
 </div>
@@ -616,32 +698,32 @@ Based on current market conditions (NIFTY +0.8%, VIX 14.25), consider an Iron Co
 </div>
 
 <!-- Modals -->
-<div class="modal" id="aiModal">
+<div class="modal" id="tvModal">
 <div class="modal-content">
 <div class="modal-header">
-<div class="modal-title">🤖 AI Trade Assistant</div>
-<button class="modal-close" onclick="closeModal('aiModal')">×</button>
+<div class="modal-title">📺 TradingView Integration</div>
+<button class="modal-close" onclick="closeModal('tvModal')">×</button>
 </div>
 <div class="modal-body">
-<div class="input-group">
-<label class="input-label">Ask AI anything about trading:</label>
-<textarea class="input-field" rows="4" placeholder="e.g., What's the best strategy for current market conditions?"></textarea>
-</div>
-<button class="btn btn-success" style="width:100%;margin-top:10px">💬 Ask AI</button>
-<div style="margin-top:20px;padding:15px;background:rgba(102,126,234,0.1);border-radius:6px">
-<strong>Recent Suggestions:</strong>
-<ul style="margin-top:10px;padding-left:20px;color:#cbd5e1;font-size:0.9em">
-<li>Iron Condor for range-bound market</li>
-<li>Straddle for high volatility</li>
-<li>Bull spread for moderate uptrend</li>
+<p style="margin-bottom:15px">TradingView is fully integrated with QuantEdge Pro!</p>
+<div style="background:rgba(102,126,234,0.1);padding:15px;border-radius:6px;margin:15px 0">
+<strong>✅ Active Features:</strong>
+<ul style="margin-top:10px;padding-left:20px;color:#cbd5e1">
+<li>Real-time charts with 100+ indicators</li>
+<li>Alert automation with webhooks</li>
+<li>Auto-trade execution</li>
+<li>Custom Pine Script support</li>
+<li>Multi-chart layouts</li>
+<li>Stock screener & heatmaps</li>
 </ul>
 </div>
+<button class="btn btn-success" style="width:100%" onclick="closeModal('tvModal')">✅ Got It!</button>
 </div>
 </div>
 </div>
 
 <script>
-let marketChart,equityChart;
+let tvWidget,tvMainWidget,tvChart1,tvChart2;
 
 // Tab Navigation
 document.querySelectorAll('.nav-tab').forEach(tab=>{
@@ -650,111 +732,146 @@ document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
 document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
 tab.classList.add('active');
 document.getElementById(tab.dataset.tab).classList.add('active');
-if(tab.dataset.tab==='dashboard')initMarketChart();
-if(tab.dataset.tab==='portfolio')initEquityChart();
+if(tab.dataset.tab==='dashboard')initDashboardChart();
+if(tab.dataset.tab==='tradingview')initMainTVChart();
+if(tab.dataset.tab==='charts')initMultiCharts();
 });
 });
 
-function initMarketChart(){
-if(marketChart)return;
-const ctx=document.getElementById('marketChart').getContext('2d');
-const labels=[];
-const data=[];
-let price=23500;
-for(let i=0;i<50;i++){
-labels.push('');
-price+=Math.random()*50-25;
-data.push(price);
-}
-marketChart=new Chart(ctx,{
-type:'line',
-data:{
-labels:labels,
-datasets:[{
-label:'NIFTY',
-data:data,
-borderColor:'#10b981',
-backgroundColor:'rgba(16,185,129,0.1)',
-borderWidth:2,
-tension:0.4,
-fill:true
-}]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-plugins:{legend:{display:false}},
-scales:{
-y:{grid:{color:'rgba(102,126,234,0.1)'},ticks:{color:'#94a3b8'}},
-x:{grid:{display:false},ticks:{display:false}}
-}
-}
+function initDashboardChart(){
+if(tvWidget)return;
+tvWidget=new TradingView.widget({
+"width":"100%",
+"height":"100%",
+"symbol":"NSE:NIFTY",
+"interval":"15",
+"timezone":"Asia/Kolkata",
+"theme":"dark",
+"style":"1",
+"locale":"en",
+"toolbar_bg":"#0f1729",
+"enable_publishing":false,
+"hide_side_toolbar":false,
+"allow_symbol_change":true,
+"container_id":"tradingview_chart"
 });
 }
 
-function initEquityChart(){
-if(equityChart)return;
-const ctx=document.getElementById('equityChart').getContext('2d');
-const labels=[];
-const data=[];
-let equity=500000;
-for(let i=0;i<100;i++){
-labels.push('');
-equity+=Math.random()*5000-2000;
-data.push(equity);
-}
-equityChart=new Chart(ctx,{
-type:'line',
-data:{
-labels:labels,
-datasets:[{
-label:'Portfolio Value',
-data:data,
-borderColor:'#667eea',
-backgroundColor:'rgba(102,126,234,0.1)',
-borderWidth:2,
-tension:0.4,
-fill:true
-}]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-plugins:{legend:{display:false}},
-scales:{
-y:{grid:{color:'rgba(102,126,234,0.1)'},ticks:{color:'#94a3b8'}},
-x:{grid:{display:false},ticks:{display:false}}
-}
-}
+function initMainTVChart(){
+if(tvMainWidget)return;
+tvMainWidget=new TradingView.widget({
+"width":"100%",
+"height":"100%",
+"symbol":"NSE:NIFTY",
+"interval":"D",
+"timezone":"Asia/Kolkata",
+"theme":"dark",
+"style":"1",
+"locale":"en",
+"toolbar_bg":"#0f1729",
+"enable_publishing":false,
+"hide_side_toolbar":false,
+"allow_symbol_change":true,
+"studies":["RSI@tv-basicstudies","MACD@tv-basicstudies","BB@tv-basicstudies"],
+"container_id":"tradingview_main_chart"
 });
+}
+
+function initMultiCharts(){
+if(tvChart1)return;
+tvChart1=new TradingView.widget({
+"width":"100%",
+"height":"100%",
+"symbol":"NSE:NIFTY",
+"interval":"15",
+"timezone":"Asia/Kolkata",
+"theme":"dark",
+"style":"1",
+"locale":"en",
+"toolbar_bg":"#0f1729",
+"enable_publishing":false,
+"container_id":"tradingview_chart1"
+});
+tvChart2=new TradingView.widget({
+"width":"100%",
+"height":"100%",
+"symbol":"NSE:BANKNIFTY",
+"interval":"15",
+"timezone":"Asia/Kolkata",
+"theme":"dark",
+"style":"1",
+"locale":"en",
+"toolbar_bg":"#0f1729",
+"enable_publishing":false,
+"container_id":"tradingview_chart2"
+});
+}
+
+function openTradingView(){
+window.open('https://www.tradingview.com/chart/','_blank');
+}
+
+function changeSymbol(symbol){
+alert('📺 Changing symbol to: '+symbol+'\n\nChart will update with new symbol.');
+}
+
+function setChartType(type){
+alert('📊 Chart Type: '+type.toUpperCase()+'\n\nChart style will be updated.');
+}
+
+function showTVFeature(feature){
+const features={
+'screener':'Stock Screener - Scan markets with custom filters',
+'heatmap':'Market Heatmap - Visual overview of market performance',
+'economic':'Economic Calendar - Track important economic events'
+};
+alert('📺 TradingView Feature\n\n'+features[feature]+'\n\nOpening in new window...');
+window.open('https://www.tradingview.com/','_blank');
+}
+
+function createTVAlert(){
+alert('🔔 Create TradingView Alert\n\nSteps:\n1. Set alert conditions\n2. Choose notification method\n3. Enable auto-execution (optional)\n4. Save alert\n\nAlert will monitor 24/7!');
+}
+
+function generateWebhook(){
+const id=Math.random().toString(36).substr(2,9);
+alert('✅ New Webhook Generated!\n\nURL:\nhttps://api.quantedge.pro/webhook/tv/'+id+'\n\nCopy this URL to TradingView alert settings.');
+}
+
+function copyWebhook(num){
+alert('📋 Webhook URL Copied!\n\nPaste this in TradingView alert settings under "Webhook URL" field.');
+}
+
+function testWebhook(num){
+alert('🧪 Testing Webhook...\n\nSending test payload...\n\n✅ Success! Webhook is working correctly.\n\nResponse time: 142ms');
+}
+
+function copyPayload(){
+alert('📋 Payload Template Copied!\n\nPaste this in TradingView alert "Message" field.\n\nReplace values as needed.');
+}
+
+function addIndicator(name){
+alert('📊 Adding Indicator: '+name+'\n\nIndicator will be added to the chart.\n\nConfigure settings in TradingView.');
+}
+
+function executeComboTrade(){
+alert('🚀 Executing AI + TradingView Combo Trade!\n\nAnalysis:\n• TradingView RSI: 28.5 (Oversold)\n• AI Prediction: 72% bounce probability\n\nExecuting: BUY NIFTY 23500 CE\nQuantity: 1 lot\n\n✅ Order placed successfully!');
+}
+
+function showQuickTrade(){
+alert('⚡ Quick Trade\n\nRapid order entry with TradingView data.\n\nFeatures:\n• One-click execution\n• TV indicator values\n• Smart order routing');
 }
 
 function showAIAssistant(){
-document.getElementById('aiModal').classList.add('active');
+alert('🤖 AI Trade Assistant\n\nAI-powered trading assistant with TradingView integration.\n\nAsk questions like:\n• "What do TV indicators show?"\n• "Should I enter based on RSI?"\n• "Analyze MACD signals"');
 }
 
 function closeModal(id){
 document.getElementById(id).classList.remove('active');
 }
 
-function showQuickTrade(){
-alert('⚡ Quick Trade\n\nRapid order entry for experienced traders.\n\nFeatures:\n• One-click execution\n• Pre-configured strategies\n• Smart order routing\n• Best price execution');
-}
-
-function applyAIStrategy(){
-alert('✅ AI Strategy Applied!\n\nIron Condor strategy has been created with AI-recommended parameters.\n\nGo to Builder tab to review and deploy.');
-}
-
-function refreshData(){
-alert('🔄 Refreshing real-time data...\n\nUpdating:\n• Market prices\n• Portfolio values\n• Greeks\n• Positions');
-}
-
-function manageAlerts(){
-alert('🔔 Alert Management\n\nCreate and manage alerts:\n• Price alerts\n• Greek alerts\n• Volatility alerts\n• Pattern alerts\n\nNotifications via:\n• Email\n• SMS\n• Push\n• Telegram');
-}
-
-function newStrategy(){
-alert('🎯 Create New Strategy\n\nChoose builder type:\n1. Basic Builder\n2. Advanced Builder\n3. Ultimate Builder (AI-powered)');
+function showUserMenu(){
+alert('👤 User Menu\n\n• Profile Settings\n• TradingView Connection\n• Subscription\n• API Keys\n• Logout');
 }
 
 function openBuilder(type){
@@ -766,26 +883,11 @@ const urls={
 window.open(urls[type],'_blank');
 }
 
-function showAnalytics(type){
-alert('📊 '+type.toUpperCase()+' Analytics\n\nAdvanced analytics feature.\n\nShowing detailed '+type+' analysis...');
-}
-
-function openJournal(){
-alert('📝 Trade Journal\n\nLog your trades with:\n• Entry/exit details\n• Screenshots\n• Notes\n• Emotions\n• Tags\n\nAnalyze your trading psychology!');
-}
-
-function setTheme(theme){
-alert('🎨 Theme: '+theme.toUpperCase()+'\n\nTheme will be applied.\n\nCustomize colors, fonts, and layout.');
-}
-
-function showUserMenu(){
-alert('👤 User Menu\n\n• Profile Settings\n• Subscription\n• Billing\n• API Keys\n• Security\n• Logout');
-}
-
 window.addEventListener('load',()=>{
-initMarketChart();
-console.log('🚀 QuantEdge Pro ULTIMATE Loaded!');
-console.log('💎 All Premium Features Active');
+initDashboardChart();
+console.log('🚀 QuantEdge Pro ULTIMATE + TradingView Loaded!');
+console.log('📺 TradingView Integration Active');
+console.log('💎 All Premium Features Available');
 });
 </script>
 
