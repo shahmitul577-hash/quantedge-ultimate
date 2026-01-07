@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuantEdge Pro ULTIMATE - Complete Trading Platform</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter','Segoe UI',system-ui,sans-serif;background:#0a0e27;color:#e2e8f0;overflow-x:hidden}
+.topbar{background:linear-gradient(135deg,#667eea,#764ba2);padding:8px 20px;display:flex;justify-content:space-between;align-items:center;font-size:0.85em}
+.topbar-left{display:flex;gap:15px;align-items:center}
+.topbar-item{color:#fff;display:flex;align-items:center;gap:5px}
+.topbar-value{font-weight:700}
+.topbar-right{display:flex;gap:10px;align-items:center}
+.user-menu{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.2);padding:5px 12px;border-radius:20px;cursor:pointer}
+.user-avatar{width:25px;height:25px;border-radius:50%;background:#ffd700;display:flex;align-items:center;justify-content:center;font-size:0.9em}
+.navbar{background:rgba(10,14,39,0.95);backdrop-filter:blur(10px);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(102,126,234,0.3);position:sticky;top:0;z-index:1000}
+.nav-brand{font-size:1.2em;font-weight:900;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:flex;align-items:center;gap:8px}
+.nav-tabs{display:flex;gap:3px;flex-wrap:wrap}
+.nav-tab{padding:7px 12px;border-radius:5px;cursor:pointer;transition:all 0.3s;font-size:0.8em;font-weight:600;color:#cbd5e1;background:rgba(102,126,234,0.1)}
+.nav-tab:hover{background:rgba(102,126,234,0.2);color:#fff}
+.nav-tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+.nav-actions{display:flex;gap:6px}
+.btn{padding:7px 14px;border:none;border-radius:5px;font-weight:600;cursor:pointer;transition:all 0.3s;font-size:0.8em}
+.btn-primary{background:#fff;color:#667eea}
+.btn-success{background:#10b981;color:#fff}
+.btn-danger{background:#ef4444;color:#fff}
+.btn-warning{background:#f59e0b;color:#fff}
+.btn-info{background:#06b6d4;color:#fff}
+.btn-purple{background:#a855f7;color:#fff}
+.container{max-width:1900px;margin:12px auto;padding:0 12px}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:linear-gradient(135deg,#1a1f3a,#2d3561);padding:15px;border-radius:8px;border:1px solid rgba(102,126,234,0.3);margin-bottom:12px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.card-title{color:#ffd700;font-weight:700;font-size:1em}
+.chart-container{background:#0f1729;border:1px solid rgba(102,126,234,0.3);border-radius:6px;padding:12px;height:300px;margin-bottom:12px}
+.stat-box{background:rgba(102,126,234,0.1);padding:15px;border-radius:8px;text-align:center;border:1px solid rgba(102,126,234,0.3)}
+.stat-label{font-size:0.75em;color:#94a3b8;margin-bottom:5px;font-weight:600}
+.stat-value{font-size:1.5em;font-weight:bold;color:#e2e8f0}
+.stat-value.positive{color:#10b981}
+.stat-value.negative{color:#ef4444}
+.feature-card{background:linear-gradient(135deg,#1a1f3a,#2d3561);padding:18px;border-radius:8px;border:2px solid rgba(102,126,234,0.3);transition:all 0.3s;cursor:pointer}
+.feature-card:hover{border-color:#667eea;transform:translateY(-3px);box-shadow:0 8px 25px rgba(102,126,234,0.5)}
+.feature-icon{font-size:2.5em;margin-bottom:10px}
+.feature-title{color:#ffd700;font-weight:700;margin-bottom:8px;font-size:1em}
+.feature-desc{color:#cbd5e1;font-size:0.85em;line-height:1.5}
+.feature-badge{background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:3px 8px;border-radius:12px;font-size:0.7em;font-weight:700;margin-left:8px}
+.alert{padding:12px;border-radius:6px;margin-bottom:12px;border-left:4px solid;font-size:0.85em}
+.alert-success{background:rgba(16,185,129,0.1);border-color:#10b981;color:#6ee7b7}
+.alert-info{background:rgba(6,182,212,0.1);border-color:#06b6d4;color:#67e8f9}
+.alert-warning{background:rgba(245,158,11,0.1);border-color:#f59e0b;color:#fbbf24}
+.alert-premium{background:linear-gradient(135deg,rgba(255,215,0,0.2),rgba(255,237,78,0.2));border-color:#ffd700;color:#ffd700}
+.input-group{margin-bottom:10px}
+.input-label{font-size:0.75em;color:#94a3b8;margin-bottom:4px;display:block;font-weight:600}
+.input-field{width:100%;padding:8px;border:2px solid #475569;border-radius:5px;background:#0f1729;color:#e2e8f0;font-size:0.85em}
+.input-field:focus{outline:none;border-color:#667eea}
+.broker-card{background:rgba(102,126,234,0.1);padding:15px;border-radius:8px;border:2px solid rgba(102,126,234,0.3);display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.3s}
+.broker-card:hover{border-color:#667eea;transform:scale(1.02)}
+.broker-card.connected{border-color:#10b981;background:rgba(16,185,129,0.1)}
+.broker-logo{width:50px;height:50px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.5em}
+.broker-info{flex:1}
+.broker-name{font-weight:700;color:#e2e8f0;margin-bottom:3px}
+.broker-status{font-size:0.75em;color:#94a3b8}
+.broker-status.connected{color:#10b981}
+.strategy-list{display:flex;flex-direction:column;gap:10px}
+.strategy-item{background:rgba(102,126,234,0.1);padding:12px;border-radius:6px;border:1px solid rgba(102,126,234,0.3);display:flex;justify-content:space-between;align-items:center}
+.strategy-name{font-weight:600;color:#e2e8f0}
+.strategy-stats{display:flex;gap:15px;font-size:0.8em}
+.strategy-stat{display:flex;flex-direction:column;align-items:center}
+.strategy-stat-label{color:#94a3b8;font-size:0.75em}
+.strategy-stat-value{color:#10b981;font-weight:700}
+.trade-item{background:rgba(102,126,234,0.1);padding:12px;border-radius:6px;border-left:4px solid;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.trade-item.profit{border-color:#10b981}
+.trade-item.loss{border-color:#ef4444}
+.trade-info{flex:1}
+.trade-symbol{font-weight:700;color:#e2e8f0;margin-bottom:3px}
+.trade-time{font-size:0.75em;color:#94a3b8}
+.trade-pnl{font-size:1.2em;font-weight:700}
+.trade-pnl.positive{color:#10b981}
+.trade-pnl.negative{color:#ef4444}
+.notification{background:rgba(102,126,234,0.1);padding:12px;border-radius:6px;border-left:4px solid #667eea;margin-bottom:8px;font-size:0.85em}
+.notification-time{color:#94a3b8;font-size:0.75em;margin-top:5px}
+.pricing-card{background:linear-gradient(135deg,#1a1f3a,#2d3561);padding:25px;border-radius:10px;border:2px solid rgba(102,126,234,0.3);text-align:center;transition:all 0.3s}
+.pricing-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(102,126,234,0.5)}
+.pricing-card.featured{border-color:#ffd700;box-shadow:0 0 30px rgba(255,215,0,0.3)}
+.pricing-tier{font-size:1.5em;font-weight:900;color:#ffd700;margin-bottom:10px}
+.pricing-price{font-size:2.5em;font-weight:900;color:#e2e8f0;margin-bottom:15px}
+.pricing-features{text-align:left;margin:20px 0}
+.pricing-feature{padding:8px 0;border-bottom:1px solid rgba(102,126,234,0.2);font-size:0.85em;color:#cbd5e1}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:2000;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:linear-gradient(135deg,#1a1f3a,#2d3561);padding:25px;border-radius:12px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;border:2px solid rgba(102,126,234,0.5)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.modal-title{font-size:1.3em;color:#ffd700}
+.modal-close{background:none;border:none;color:#e2e8f0;font-size:1.5em;cursor:pointer}
+.progress-bar{width:100%;height:8px;background:#0f1729;border-radius:10px;overflow:hidden;margin:10px 0}
+.progress-fill{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);transition:width 0.3s}
+.badge{padding:3px 8px;border-radius:12px;font-size:0.7em;font-weight:700;margin-left:5px}
+.badge-new{background:#10b981;color:#fff}
+.badge-pro{background:#a855f7;color:#fff}
+.badge-premium{background:#ffd700;color:#000}
+.badge-beta{background:#06b6d4;color:#fff}
+@media(max-width:1200px){
+.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+.topbar{flex-direction:column;gap:10px}
+.nav-tabs{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+<div class="topbar-left">
+<div class="topbar-item">
+<span>NIFTY:</span>
+<span class="topbar-value" style="color:#10b981">23,485 ↗</span>
+</div>
+<div class="topbar-item">
+<span>BANKNIFTY:</span>
+<span class="topbar-value" style="color:#10b981">48,250 ↗</span>
+</div>
+<div class="topbar-item">
+<span>VIX:</span>
+<span class="topbar-value">14.25</span>
+</div>
+<div class="topbar-item">
+<span>Portfolio:</span>
+<span class="topbar-value" style="color:#10b981">₹5.8L (+₹12.5K)</span>
+</div>
+</div>
+<div class="topbar-right">
+<div class="topbar-item">🔔 3 Alerts</div>
+<div class="user-menu" onclick="showUserMenu()">
+<div class="user-avatar">MS</div>
+<span>Mitul Shah</span>
+<span>▼</span>
+</div>
+</div>
+</div>
+
+<!-- Navigation -->
+<nav class="navbar">
+<div class="nav-brand">🚀 QuantEdge Pro ULTIMATE</div>
+<div class="nav-tabs">
+<div class="nav-tab active" data-tab="dashboard">Dashboard</div>
+<div class="nav-tab" data-tab="builder">Builder</div>
+<div class="nav-tab" data-tab="live">Live Trading</div>
+<div class="nav-tab" data-tab="portfolio">Portfolio</div>
+<div class="nav-tab" data-tab="analytics">Analytics</div>
+<div class="nav-tab" data-tab="social">Social</div>
+<div class="nav-tab" data-tab="learning">Learning</div>
+<div class="nav-tab" data-tab="settings">Settings</div>
+</div>
+<div class="nav-actions">
+<button class="btn btn-success" onclick="showQuickTrade()">⚡ Quick Trade</button>
+<button class="btn btn-primary" onclick="showAIAssistant()">🤖 AI Assistant</button>
+</div>
+</nav>
+
+<div class="container">
+
+<!-- Dashboard Tab -->
+<div class="tab-content active" id="dashboard">
+<div class="alert alert-premium">
+<strong>💎 PREMIUM ACTIVE:</strong> All advanced features unlocked! Real-time data, AI assistant, auto-trading, and more.
+</div>
+
+<div class="grid-4">
+<div class="stat-box">
+<div class="stat-label">Portfolio Value</div>
+<div class="stat-value">₹5.8L</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Today's P&L</div>
+<div class="stat-value positive">+₹12.5K</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Active Strategies</div>
+<div class="stat-value">4</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Win Rate</div>
+<div class="stat-value">76%</div>
+</div>
+</div>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-header">
+<div class="card-title">📈 Real-Time Market Data <span class="badge badge-new">LIVE</span></div>
+<button class="btn btn-info btn-sm" onclick="refreshData()">🔄 Refresh</button>
+</div>
+<div class="chart-container">
+<canvas id="marketChart"></canvas>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">🤖 AI Trade Assistant <span class="badge badge-premium">AI</span></div>
+</div>
+<div style="background:rgba(102,126,234,0.1);padding:15px;border-radius:6px;margin-bottom:10px">
+<div style="font-weight:600;margin-bottom:8px">💡 AI Recommendation:</div>
+<div style="font-size:0.9em;color:#cbd5e1;line-height:1.6">
+Based on current market conditions (NIFTY +0.8%, VIX 14.25), consider an Iron Condor strategy with strikes at 23400/23300 PUT and 23600/23700 CALL. Expected profit: ₹8,500. Win probability: 72%.
+</div>
+</div>
+<button class="btn btn-success" style="width:100%" onclick="applyAIStrategy()">✅ Apply Strategy</button>
+<button class="btn btn-info" style="width:100%;margin-top:8px" onclick="showAIAssistant()">💬 Chat with AI</button>
+</div>
+</div>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-header">
+<div class="card-title">🔔 Smart Alerts <span class="badge badge-new">NEW</span></div>
+<button class="btn btn-info btn-sm" onclick="manageAlerts()">⚙️ Manage</button>
+</div>
+<div class="notification">
+<strong>🎯 Price Alert:</strong> NIFTY crossed 23,500
+<div class="notification-time">2 minutes ago</div>
+</div>
+<div class="notification">
+<strong>📊 Greek Alert:</strong> Portfolio Delta reached +0.5
+<div class="notification-time">15 minutes ago</div>
+</div>
+<div class="notification">
+<strong>⚡ Volatility Alert:</strong> VIX dropped below 15
+<div class="notification-time">1 hour ago</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">📊 Active Strategies</div>
+<button class="btn btn-success btn-sm" onclick="newStrategy()">➕ New</button>
+</div>
+<div class="strategy-list">
+<div class="strategy-item">
+<div class="strategy-name">Iron Condor Pro</div>
+<div class="strategy-stats">
+<div class="strategy-stat">
+<div class="strategy-stat-label">P&L</div>
+<div class="strategy-stat-value">+₹4.2K</div>
+</div>
+<div class="strategy-stat">
+<div class="strategy-stat-label">Status</div>
+<div class="strategy-stat-value">Active</div>
+</div>
+</div>
+</div>
+<div class="strategy-item">
+<div class="strategy-name">Straddle Master</div>
+<div class="strategy-stats">
+<div class="strategy-stat">
+<div class="strategy-stat-label">P&L</div>
+<div class="strategy-stat-value">+₹3.8K</div>
+</div>
+<div class="strategy-stat">
+<div class="strategy-stat-label">Status</div>
+<div class="strategy-stat-value">Active</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">📝 Recent Trades <span class="badge badge-new">LIVE</span></div>
+</div>
+<div class="trade-item profit">
+<div class="trade-info">
+<div class="trade-symbol">NIFTY 23500 CE - BUY</div>
+<div class="trade-time">Today, 10:45 AM</div>
+</div>
+<div class="trade-pnl positive">+₹2,450</div>
+</div>
+<div class="trade-item profit">
+<div class="trade-info">
+<div class="trade-symbol">BANKNIFTY 48000 PE - SELL</div>
+<div class="trade-time">Today, 11:20 AM</div>
+</div>
+<div class="trade-pnl positive">+₹1,850</div>
+</div>
+<div class="trade-item loss">
+<div class="trade-info">
+<div class="trade-symbol">NIFTY 23400 PE - BUY</div>
+<div class="trade-time">Today, 2:15 PM</div>
+</div>
+<div class="trade-pnl negative">-₹680</div>
+</div>
+</div>
+</div>
+
+<!-- Builder Tab -->
+<div class="tab-content" id="builder">
+<div class="alert alert-info">
+<strong>🎯 Strategy Builder:</strong> Create complex multi-leg strategies with AI optimization, Greeks analysis, and probability calculations.
+</div>
+<div class="card">
+<div class="card-title">🏗️ Visual Strategy Builder</div>
+<p style="color:#cbd5e1;margin:15px 0">Build your strategy using the advanced builder with all features:</p>
+<div class="grid-3">
+<div class="feature-card" onclick="openBuilder('basic')">
+<div class="feature-icon">🎯</div>
+<div class="feature-title">Basic Builder</div>
+<div class="feature-desc">Simple leg-by-leg builder</div>
+</div>
+<div class="feature-card" onclick="openBuilder('advanced')">
+<div class="feature-icon">🚀</div>
+<div class="feature-title">Advanced Builder</div>
+<div class="feature-desc">With Greeks & Payoff</div>
+</div>
+<div class="feature-card" onclick="openBuilder('ultimate')">
+<div class="feature-icon">💎</div>
+<div class="feature-title">Ultimate Builder <span class="badge badge-premium">PRO</span></div>
+<div class="feature-desc">All features + AI</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Live Trading Tab -->
+<div class="tab-content" id="live">
+<div class="alert alert-success">
+<strong>🔴 LIVE TRADING ACTIVE:</strong> Connected to Zerodha. Auto-trading enabled for 4 strategies.
+</div>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-header">
+<div class="card-title">🤝 Broker Connections <span class="badge badge-new">SYNC</span></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div class="broker-card connected">
+<div class="broker-logo">Z</div>
+<div class="broker-info">
+<div class="broker-name">Zerodha Kite</div>
+<div class="broker-status connected">✅ Connected | Balance: ₹2.5L</div>
+</div>
+<button class="btn btn-danger btn-sm">Disconnect</button>
+</div>
+<div class="broker-card">
+<div class="broker-logo">U</div>
+<div class="broker-info">
+<div class="broker-name">Upstox</div>
+<div class="broker-status">Not Connected</div>
+</div>
+<button class="btn btn-success btn-sm">Connect</button>
+</div>
+<div class="broker-card">
+<div class="broker-logo">A</div>
+<div class="broker-info">
+<div class="broker-name">Angel One</div>
+<div class="broker-status">Not Connected</div>
+</div>
+<button class="btn btn-success btn-sm">Connect</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">📊 Live Positions</div>
+</div>
+<table style="width:100%;font-size:0.85em">
+<thead>
+<tr style="border-bottom:2px solid rgba(102,126,234,0.3)">
+<th style="padding:10px;text-align:left">Symbol</th>
+<th style="padding:10px;text-align:right">Qty</th>
+<th style="padding:10px;text-align:right">Entry</th>
+<th style="padding:10px;text-align:right">LTP</th>
+<th style="padding:10px;text-align:right">P&L</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom:1px solid rgba(102,126,234,0.2)">
+<td style="padding:10px">NIFTY 23500 CE</td>
+<td style="padding:10px;text-align:right">2</td>
+<td style="padding:10px;text-align:right">₹145</td>
+<td style="padding:10px;text-align:right">₹168</td>
+<td style="padding:10px;text-align:right;color:#10b981;font-weight:700">+₹2,300</td>
+</tr>
+<tr style="border-bottom:1px solid rgba(102,126,234,0.2)">
+<td style="padding:10px">NIFTY 23400 PE</td>
+<td style="padding:10px;text-align:right">1</td>
+<td style="padding:10px;text-align:right">₹125</td>
+<td style="padding:10px;text-align:right">₹138</td>
+<td style="padding:10px;text-align:right;color:#10b981;font-weight:700">+₹650</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- Portfolio Tab -->
+<div class="tab-content" id="portfolio">
+<div class="alert alert-info">
+<strong>💼 Portfolio Tracker:</strong> Multi-strategy portfolio management with consolidated P&L and risk metrics.
+</div>
+
+<div class="grid-4">
+<div class="stat-box">
+<div class="stat-label">Total Value</div>
+<div class="stat-value">₹5.8L</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">All-Time P&L</div>
+<div class="stat-value positive">+₹45.2K</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Sharpe Ratio</div>
+<div class="stat-value">2.68</div>
+</div>
+<div class="stat-box">
+<div class="stat-label">Max Drawdown</div>
+<div class="stat-value negative">-12%</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">📈 Equity Curve</div>
+</div>
+<div class="chart-container">
+<canvas id="equityChart"></canvas>
+</div>
+</div>
+</div>
+
+<!-- Analytics Tab -->
+<div class="tab-content" id="analytics">
+<div class="alert alert-premium">
+<strong>📊 Advanced Analytics:</strong> Heatmaps, correlation matrix, sentiment analysis, and risk metrics.
+</div>
+
+<div class="grid-3">
+<div class="feature-card" onclick="showAnalytics('heatmap')">
+<div class="feature-icon">🔥</div>
+<div class="feature-title">Heatmaps</div>
+<div class="feature-desc">Performance & correlation heatmaps</div>
+</div>
+<div class="feature-card" onclick="showAnalytics('sentiment')">
+<div class="feature-icon">📈</div>
+<div class="feature-title">Sentiment Analysis</div>
+<div class="feature-desc">News, social media, options flow</div>
+</div>
+<div class="feature-card" onclick="showAnalytics('risk')">
+<div class="feature-icon">⚠️</div>
+<div class="feature-title">Risk Analytics</div>
+<div class="feature-desc">VaR, CVaR, Monte Carlo</div>
+</div>
+</div>
+</div>
+
+<!-- Social Tab -->
+<div class="tab-content" id="social">
+<div class="alert alert-info">
+<strong>🌐 Social Trading:</strong> Follow top traders, copy strategies, and compete on leaderboards.
+</div>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-header">
+<div class="card-title">🏆 Top Traders</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div class="strategy-item">
+<div class="strategy-name">🥇 Rajesh Kumar</div>
+<div class="strategy-stats">
+<div class="strategy-stat">
+<div class="strategy-stat-label">Return</div>
+<div class="strategy-stat-value">+245%</div>
+</div>
+<div class="strategy-stat">
+<div class="strategy-stat-label">Followers</div>
+<div class="strategy-stat-value">1,250</div>
+</div>
+</div>
+<button class="btn btn-success btn-sm">Follow</button>
+</div>
+<div class="strategy-item">
+<div class="strategy-name">🥈 Priya Sharma</div>
+<div class="strategy-stats">
+<div class="strategy-stat">
+<div class="strategy-stat-label">Return</div>
+<div class="strategy-stat-value">+198%</div>
+</div>
+<div class="strategy-stat">
+<div class="strategy-stat-label">Followers</div>
+<div class="strategy-stat-value">890</div>
+</div>
+</div>
+<button class="btn btn-success btn-sm">Follow</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div class="card-title">📝 Trade Journal <span class="badge badge-new">NEW</span></div>
+</div>
+<p style="color:#cbd5e1;margin-bottom:15px">Log your trades with notes, screenshots, and emotions for better analysis.</p>
+<button class="btn btn-primary" style="width:100%" onclick="openJournal()">📖 Open Journal</button>
+</div>
+</div>
+</div>
+
+<!-- Learning Tab -->
+<div class="tab-content" id="learning">
+<div class="alert alert-info">
+<strong>🎓 Learning Center:</strong> Video tutorials, courses, webinars, and certifications.
+</div>
+
+<div class="grid-3">
+<div class="feature-card">
+<div class="feature-icon">🎥</div>
+<div class="feature-title">Video Tutorials</div>
+<div class="feature-desc">50+ step-by-step videos</div>
+<button class="btn btn-primary btn-sm" style="margin-top:10px;width:100%">Watch Now</button>
+</div>
+<div class="feature-card">
+<div class="feature-icon">📚</div>
+<div class="feature-title">Online Courses</div>
+<div class="feature-desc">Complete trading courses</div>
+<button class="btn btn-primary btn-sm" style="margin-top:10px;width:100%">Enroll</button>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🎓</div>
+<div class="feature-title">Certifications</div>
+<div class="feature-desc">Get certified trader badge</div>
+<button class="btn btn-primary btn-sm" style="margin-top:10px;width:100%">Start</button>
+</div>
+</div>
+</div>
+
+<!-- Settings Tab -->
+<div class="tab-content" id="settings">
+<div class="alert alert-info">
+<strong>⚙️ Settings:</strong> Customize your platform, manage subscriptions, and configure integrations.
+</div>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-title">💳 Subscription Plan</div>
+<div style="background:rgba(255,215,0,0.1);padding:15px;border-radius:6px;border:2px solid #ffd700;margin:15px 0">
+<div style="font-size:1.2em;font-weight:700;color:#ffd700;margin-bottom:5px">PREMIUM PLAN</div>
+<div style="color:#cbd5e1;font-size:0.9em">₹2,999/month • Renews on Jan 15, 2024</div>
+</div>
+<button class="btn btn-warning" style="width:100%">Upgrade to Enterprise</button>
+<button class="btn btn-danger" style="width:100%;margin-top:8px">Cancel Subscription</button>
+</div>
+
+<div class="card">
+<div class="card-title">🔔 Notification Settings</div>
+<div class="input-group">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+<input type="checkbox" checked>
+<span>Email Notifications</span>
+</label>
+</div>
+<div class="input-group">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+<input type="checkbox" checked>
+<span>SMS Alerts</span>
+</label>
+</div>
+<div class="input-group">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+<input type="checkbox" checked>
+<span>Push Notifications</span>
+</label>
+</div>
+<div class="input-group">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+<input type="checkbox" checked>
+<span>Telegram Alerts</span>
+</label>
+</div>
+<button class="btn btn-success" style="width:100%;margin-top:10px">Save Settings</button>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">🎨 Theme & Appearance</div>
+<div class="grid-3">
+<div class="feature-card" onclick="setTheme('dark')">
+<div class="feature-icon">🌙</div>
+<div class="feature-title">Dark Theme</div>
+<div class="feature-desc">Current</div>
+</div>
+<div class="feature-card" onclick="setTheme('light')">
+<div class="feature-icon">☀️</div>
+<div class="feature-title">Light Theme</div>
+<div class="feature-desc">Switch</div>
+</div>
+<div class="feature-card" onclick="setTheme('custom')">
+<div class="feature-icon">🎨</div>
+<div class="feature-title">Custom</div>
+<div class="feature-desc">Customize</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- Modals -->
+<div class="modal" id="aiModal">
+<div class="modal-content">
+<div class="modal-header">
+<div class="modal-title">🤖 AI Trade Assistant</div>
+<button class="modal-close" onclick="closeModal('aiModal')">×</button>
+</div>
+<div class="modal-body">
+<div class="input-group">
+<label class="input-label">Ask AI anything about trading:</label>
+<textarea class="input-field" rows="4" placeholder="e.g., What's the best strategy for current market conditions?"></textarea>
+</div>
+<button class="btn btn-success" style="width:100%;margin-top:10px">💬 Ask AI</button>
+<div style="margin-top:20px;padding:15px;background:rgba(102,126,234,0.1);border-radius:6px">
+<strong>Recent Suggestions:</strong>
+<ul style="margin-top:10px;padding-left:20px;color:#cbd5e1;font-size:0.9em">
+<li>Iron Condor for range-bound market</li>
+<li>Straddle for high volatility</li>
+<li>Bull spread for moderate uptrend</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+let marketChart,equityChart;
+
+// Tab Navigation
+document.querySelectorAll('.nav-tab').forEach(tab=>{
+tab.addEventListener('click',()=>{
+document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+tab.classList.add('active');
+document.getElementById(tab.dataset.tab).classList.add('active');
+if(tab.dataset.tab==='dashboard')initMarketChart();
+if(tab.dataset.tab==='portfolio')initEquityChart();
+});
+});
+
+function initMarketChart(){
+if(marketChart)return;
+const ctx=document.getElementById('marketChart').getContext('2d');
+const labels=[];
+const data=[];
+let price=23500;
+for(let i=0;i<50;i++){
+labels.push('');
+price+=Math.random()*50-25;
+data.push(price);
+}
+marketChart=new Chart(ctx,{
+type:'line',
+data:{
+labels:labels,
+datasets:[{
+label:'NIFTY',
+data:data,
+borderColor:'#10b981',
+backgroundColor:'rgba(16,185,129,0.1)',
+borderWidth:2,
+tension:0.4,
+fill:true
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+plugins:{legend:{display:false}},
+scales:{
+y:{grid:{color:'rgba(102,126,234,0.1)'},ticks:{color:'#94a3b8'}},
+x:{grid:{display:false},ticks:{display:false}}
+}
+}
+});
+}
+
+function initEquityChart(){
+if(equityChart)return;
+const ctx=document.getElementById('equityChart').getContext('2d');
+const labels=[];
+const data=[];
+let equity=500000;
+for(let i=0;i<100;i++){
+labels.push('');
+equity+=Math.random()*5000-2000;
+data.push(equity);
+}
+equityChart=new Chart(ctx,{
+type:'line',
+data:{
+labels:labels,
+datasets:[{
+label:'Portfolio Value',
+data:data,
+borderColor:'#667eea',
+backgroundColor:'rgba(102,126,234,0.1)',
+borderWidth:2,
+tension:0.4,
+fill:true
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+plugins:{legend:{display:false}},
+scales:{
+y:{grid:{color:'rgba(102,126,234,0.1)'},ticks:{color:'#94a3b8'}},
+x:{grid:{display:false},ticks:{display:false}}
+}
+}
+});
+}
+
+function showAIAssistant(){
+document.getElementById('aiModal').classList.add('active');
+}
+
+function closeModal(id){
+document.getElementById(id).classList.remove('active');
+}
+
+function showQuickTrade(){
+alert('⚡ Quick Trade\n\nRapid order entry for experienced traders.\n\nFeatures:\n• One-click execution\n• Pre-configured strategies\n• Smart order routing\n• Best price execution');
+}
+
+function applyAIStrategy(){
+alert('✅ AI Strategy Applied!\n\nIron Condor strategy has been created with AI-recommended parameters.\n\nGo to Builder tab to review and deploy.');
+}
+
+function refreshData(){
+alert('🔄 Refreshing real-time data...\n\nUpdating:\n• Market prices\n• Portfolio values\n• Greeks\n• Positions');
+}
+
+function manageAlerts(){
+alert('🔔 Alert Management\n\nCreate and manage alerts:\n• Price alerts\n• Greek alerts\n• Volatility alerts\n• Pattern alerts\n\nNotifications via:\n• Email\n• SMS\n• Push\n• Telegram');
+}
+
+function newStrategy(){
+alert('🎯 Create New Strategy\n\nChoose builder type:\n1. Basic Builder\n2. Advanced Builder\n3. Ultimate Builder (AI-powered)');
+}
+
+function openBuilder(type){
+const urls={
+'basic':'https://shahmitul577-hash.github.io/strategy-builder/',
+'advanced':'https://shahmitul577-hash.github.io/ultimate-strategy-builder/',
+'ultimate':'https://shahmitul577-hash.github.io/ultimate-strategy-builder/'
+};
+window.open(urls[type],'_blank');
+}
+
+function showAnalytics(type){
+alert('📊 '+type.toUpperCase()+' Analytics\n\nAdvanced analytics feature.\n\nShowing detailed '+type+' analysis...');
+}
+
+function openJournal(){
+alert('📝 Trade Journal\n\nLog your trades with:\n• Entry/exit details\n• Screenshots\n• Notes\n• Emotions\n• Tags\n\nAnalyze your trading psychology!');
+}
+
+function setTheme(theme){
+alert('🎨 Theme: '+theme.toUpperCase()+'\n\nTheme will be applied.\n\nCustomize colors, fonts, and layout.');
+}
+
+function showUserMenu(){
+alert('👤 User Menu\n\n• Profile Settings\n• Subscription\n• Billing\n• API Keys\n• Security\n• Logout');
+}
+
+window.addEventListener('load',()=>{
+initMarketChart();
+console.log('🚀 QuantEdge Pro ULTIMATE Loaded!');
+console.log('💎 All Premium Features Active');
+});
+</script>
+
+</body>
+</html>
